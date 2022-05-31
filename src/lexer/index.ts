@@ -10,7 +10,7 @@ import {Token, TokenType} from "../types/lexer/tokens";
     *
     * @example - tokensSplitter("const a = 'hello world'") -> ["const", "a", "=", "'hello world'"]
  */
-function tokensSplitter(tokens: string) {
+export function tokensSplitter(tokens: string) {
     const splintedTokens = new Array<string>();
     let currentWord: string = ""; // The current word being built, strings will maintain whitespaces
     const firstSplit: string[] = tokens.split(" "); // Splits the message into words and extra whitespaces
@@ -19,21 +19,19 @@ function tokensSplitter(tokens: string) {
     * @description - joins the whitespaces and letter for strings
      */
     for (let x = 0; x < firstSplit.length; x++) {
-        if (firstSplit[x].charAt(0) === "'" || firstSplit[x].charAt(0) === "\"") {
+        if ((firstSplit[x].charAt(0) === "'" || firstSplit[x].charAt(0) === "\"") &&
+            ((firstSplit[x].charAt(firstSplit.length) !== "'" && firstSplit[x].charAt(firstSplit.length) !== "\"") || firstSplit[x].length === 1)) {
             let quotes: boolean = true;
             let fakeIndex: number = x;
-            currentWord += `${firstSplit[x]} `;
+            currentWord += firstSplit.length !== 1 ? `${firstSplit[x]} ` : firstSplit[x];
             while (quotes && firstSplit[fakeIndex + 1] !== undefined) {
                 if (!firstSplit[fakeIndex + 1].includes("'") && !firstSplit[fakeIndex + 1].includes("\"")) {
                     if (firstSplit[fakeIndex + 1] === "") {
                         currentWord += " ";
                     } else {
-                        currentWord += firstSplit[fakeIndex + 1];
+                        currentWord += `${firstSplit[fakeIndex + 1]} `;
                     }
                     fakeIndex++;
-                } else if (firstSplit[fakeIndex + 1] === "'" || firstSplit[fakeIndex + 1] === "\"") {
-                    quotes = false;
-                    currentWord += ` ${firstSplit[fakeIndex + 1]}`;
                 } else if (firstSplit[fakeIndex + 1].includes("'") || firstSplit[fakeIndex + 1].includes("\"")) {
                     quotes = false;
                     currentWord += firstSplit[fakeIndex + 1];
@@ -47,11 +45,11 @@ function tokensSplitter(tokens: string) {
         }
         currentWord = "";
     }
-    return splintedTokens;
+    return splintedTokens.filter(n => n !== "");
 }
 
 function devTokenizer() {
-    const messageToTokenize: string = "const a = 'hello world'";
+    const messageToTokenize: string = "' Hello '";
     const tokenizedMessage: Token[] = tokensSplitter(messageToTokenize).map(n => {
         if ((n.charAt(0)) === ("'" || "\"") && (n.charAt(n.length - 1)) === ("'" || "\"")) {
             return {type: TokenType.STRING, value: n};
@@ -67,5 +65,3 @@ function devTokenizer() {
     })
     return tokenizedMessage;
 }
-
-devTokenizer();

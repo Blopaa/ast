@@ -1,7 +1,7 @@
 export default {
   clearMocks: true,
-  roots: ["<rootDir>/test"],
-  modulePathIgnorePatterns: ["<rootDir>/test/utils"],
+  roots: ["<rootDir>/src/tests"],
+  modulePathIgnorePatterns: ["<rootDir>/src/tests/utils"],
   testEnvironment: "node",
   preset: "ts-jest",
 };
