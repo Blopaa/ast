@@ -5,7 +5,7 @@ import {Token, TokenType} from "../types/lexer/tokens";
     * @returns {Token[]} - The tokenized message
     * @description - This function tokenizes a message
     * @author - Pablo Sabater
-    * @date - 2020-04-24
+    * @date - 2022-05-31
     * @version - 1.0.0
     *
     * @example - tokensSplitter("const a = 'hello world'") -> ["const", "a", "=", "'hello world'"]
@@ -48,11 +48,13 @@ export function tokensSplitter(tokens: string) {
     return splintedTokens.filter(n => n !== "");
 }
 
-function devTokenizer() {
-    const messageToTokenize: string = "' Hello '";
+export function devTokenizer() {
+    const messageToTokenize: string = "const a = 'hello world' const b = 2";
     const tokenizedMessage: Token[] = tokensSplitter(messageToTokenize).map(n => {
         if ((n.charAt(0)) === ("'" || "\"") && (n.charAt(n.length - 1)) === ("'" || "\"")) {
             return {type: TokenType.STRING, value: n};
+        }else if (!isNaN(Number(n))) {
+            return {type: TokenType.NUMBER, value: n};
         }
         switch (n) {
             case "=":
