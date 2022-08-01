@@ -1,4 +1,4 @@
-import {Token, TokenType} from "../types/lexer/tokens";
+import {Symbols, Token, TokenType} from "../types/lexer/tokens";
 import {devTokenizer} from "../lexer";
 import {NodeType, ProgramNode, VariableNode} from "../types/parser/nodes";
 
@@ -18,7 +18,8 @@ function parser() {
     for (let x = 0; x < tokens.length; x++) {
         switch (tokens[x].type) {
             case TokenType.VARIABLE_DECLARATION:
-                const variableType = tokens[x].value === "const" ? "unalterable" : tokens[x].value === "let" ? "alterable" : "";
+                const variableType = tokens[x].value === Symbols.UNALTERABLE_VARIABLE_DECLARATION ? "unalterable"
+                    : tokens[x].value === Symbols.ALTERABLE_VARIABLE_DECLARATION ? "alterable" : "";
                 if (variableType === "") throw new Error("Invalid variable type");
                 const newVariable: VariableNode = {
                     variableType,
