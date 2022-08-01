@@ -5,6 +5,7 @@ export enum NodeType {
     VARIABLE = "VARIABLE",
     STRING = "STRING",
     NUMBER = "NUMBER",
+    FUNCTION = "FUNCTION",
 }
 
 export interface BaseNode<T extends NodeType> {
@@ -15,6 +16,10 @@ export interface BaseNode<T extends NodeType> {
 
 export interface VariableNode extends BaseNode<NodeType.VARIABLE> {
     variableType: "alterable" | "unalterable";
+}
+
+export interface FunctionNode extends BaseNode<NodeType.FUNCTION>{
+     parameters: string[];
 }
 
 export interface ProgramNode extends BaseNode<NodeType.MAIN> {
@@ -31,4 +36,4 @@ export interface NumberNode extends ValuedNode<NodeType.NUMBER, number> {}
 
 export type ValuedNodes = StringNode | NumberNode;
 
-type NodeSet = ValuedNodes | VariableNode | BaseNode<NodeType> | undefined;
+export type NodeSet = ValuedNodes | VariableNode | BaseNode<NodeType> | undefined;

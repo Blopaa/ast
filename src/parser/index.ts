@@ -1,6 +1,6 @@
 import {Symbols, Token, TokenType} from "../types/lexer/tokens";
 import {devTokenizer} from "../lexer";
-import {NodeType, ProgramNode, VariableNode} from "../types/parser/nodes";
+import {FunctionNode, NodeSet, NodeType, ProgramNode, VariableNode} from "../types/parser/nodes";
 
 
 /*
@@ -9,14 +9,41 @@ import {NodeType, ProgramNode, VariableNode} from "../types/parser/nodes";
     * @date - 2022-06-19
     * @version - 1.0.0
  */
-function parser() {
-    const tokens: Token[] = devTokenizer(); // removing in future
+export function parser(tokens: Token[]) {
     const program: ProgramNode = {
         type: NodeType.MAIN,
         children: [],
     }
     for (let x = 0; x < tokens.length; x++) {
         switch (tokens[x].type) {
+            case TokenType.FUNCTION:
+                let insideIndex: number = x + 3;
+                const newFunction: FunctionNode = {
+                    type: NodeType.FUNCTION,
+                    name: tokens[x + 1].value,
+                    parameters: [],
+                    children: [],
+                }
+                for(let y = insideIndex; y < tokens.length; y++){
+                    insideIndex++;
+                    if(tokens[y].type === TokenType.PARENTHESIS_CLOSE){
+                        break
+                    }
+                    newFunction.parameters.push(tokens[y].value as string)
+                }
+                const bodyTokens: Token[] = []
+                insideIndex++;
+                for(let y = insideIndex; y < tokens.length; y++){
+                    if(tokens[y].type === TokenType.BRACE_CLOSE){
+                        break
+                    }
+                    insideIndex++;
+                    bodyTokens.push(tokens[y])
+                }
+                newFunction.children = parser(bodyTokens).children;
+                x = insideIndex;
+                program.children.push(newFunction)
+                break;
             case TokenType.VARIABLE_DECLARATION:
                 const variableType = tokens[x].value === Symbols.UNALTERABLE_VARIABLE_DECLARATION ? "unalterable"
                     : tokens[x].value === Symbols.ALTERABLE_VARIABLE_DECLARATION ? "alterable" : "";
@@ -53,8 +80,5 @@ function parser() {
                 throw new Error("Invalid token");
         }
     }
-    console.log(JSON.stringify(program, null, 2));
     return program;
 }
-
-parser();
