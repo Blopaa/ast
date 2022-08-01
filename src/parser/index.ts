@@ -18,7 +18,7 @@ function parser() {
     for (let x = 0; x < tokens.length; x++) {
         switch (tokens[x].type) {
             case TokenType.VARIABLE_DECLARATION:
-                const variableType = tokens[x].value === "const" ? "const" : tokens[x].value === "let" ? "let" : "";
+                const variableType = tokens[x].value === "const" ? "unalterable" : tokens[x].value === "let" ? "alterable" : "";
                 if (variableType === "") throw new Error("Invalid variable type");
                 const newVariable: VariableNode = {
                     variableType,

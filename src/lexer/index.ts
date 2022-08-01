@@ -49,17 +49,18 @@ export function tokensSplitter(tokens: string) {
 }
 
 export function devTokenizer() {
-    const messageToTokenize: string = "const a = 'hello world' const b = 2";
+    const messageToTokenize: string = "let a = 'hello world' const b = 2";
     const tokenizedMessage: Token[] = tokensSplitter(messageToTokenize).map(n => {
         if ((n.charAt(0)) === ("'" || "\"") && (n.charAt(n.length - 1)) === ("'" || "\"")) {
             return {type: TokenType.STRING, value: n};
-        }else if (!isNaN(Number(n))) {
+        } else if (!isNaN(Number(n))) {
             return {type: TokenType.NUMBER, value: n};
         }
         switch (n) {
             case "=":
                 return {type: TokenType.ASSIGNMENT};
             case "const":
+            case "let":
                 return {type: TokenType.VARIABLE_DECLARATION, value: n};
             default:
                 return {type: TokenType.LITERAL, value: n};

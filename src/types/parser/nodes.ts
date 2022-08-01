@@ -14,20 +14,20 @@ export interface BaseNode<T extends NodeType> {
 }
 
 export interface VariableNode extends BaseNode<NodeType.VARIABLE> {
-    variableType: "const" | "let";
+    variableType: "alterable" | "unalterable";
 }
 
 export interface ProgramNode extends BaseNode<NodeType.MAIN> {
     children: NodeSet[];
 }
 
-export interface ValueNode <K extends NodeType, T extends number | string> {
+export interface ValuedNode<K extends NodeType, T extends number | string> {
     type: K
     value: T;
 }
 
-export interface StringNode extends ValueNode<NodeType.STRING, string> {}
-export interface NumberNode extends ValueNode<NodeType.NUMBER, number> {}
+export interface StringNode extends ValuedNode<NodeType.STRING, string> {}
+export interface NumberNode extends ValuedNode<NodeType.NUMBER, number> {}
 
 export type ValuedNodes = StringNode | NumberNode;
 
