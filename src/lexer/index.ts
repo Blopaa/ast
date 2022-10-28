@@ -118,6 +118,11 @@ function tokenizeFunctions(
         }
         index++;
         while (index < tokens.length) {
+            if(tokens[index].includes(Symbols.FUNCTION)) {
+                const recursiveFunctionTokens = tokenizeFunctions(tokens, index);
+                recursiveFunctionTokens[0].map((n) => functionTokens.push(n));
+                index = ++recursiveFunctionTokens[1];
+            }
             if (tokens[index].includes(Symbols.BRACE_CLOSE)) {
                 functionTokens.push(
                     tokens[index].split("").slice(0, -1).join("")
@@ -139,7 +144,7 @@ function tokenizeFunctions(
 
 export function devTokenizer() {
     const messageToTokenize =
-        "function b (a, c) { function b (a, c) { } } const a = 'hello world'";
+        "function b (a, c) { function x(a, c) { } } const a = 'hello world'";
     const tokenizedMessage: Token[] = tokensSplitter(messageToTokenize).map(
         (n) => {
             if (
@@ -177,4 +182,3 @@ export function devTokenizer() {
 }
 
 devTokenizer();
-
