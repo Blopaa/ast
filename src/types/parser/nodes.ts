@@ -1,4 +1,4 @@
-import {TokenType, ValuedTokens} from "../lexer/tokens";
+import { TokenType, ValuedTokens } from "../lexer/tokens";
 
 export enum NodeType {
     MAIN = "MAIN",
@@ -18,8 +18,8 @@ export interface VariableNode extends BaseNode<NodeType.VARIABLE> {
     variableType: "alterable" | "unalterable";
 }
 
-export interface FunctionNode extends BaseNode<NodeType.FUNCTION>{
-     parameters: string[];
+export interface FunctionNode extends BaseNode<NodeType.FUNCTION> {
+    parameters: string[];
 }
 
 export interface ProgramNode extends BaseNode<NodeType.MAIN> {
@@ -27,13 +27,17 @@ export interface ProgramNode extends BaseNode<NodeType.MAIN> {
 }
 
 export interface ValuedNode<K extends NodeType, T extends number | string> {
-    type: K
+    type: K;
     value: T;
 }
 
-export interface StringNode extends ValuedNode<NodeType.STRING, string> {}
-export interface NumberNode extends ValuedNode<NodeType.NUMBER, number> {}
+export type StringNode = ValuedNode<NodeType.STRING, string>;
+export type NumberNode = ValuedNode<NodeType.NUMBER, number>;
 
 export type ValuedNodes = StringNode | NumberNode;
 
-export type NodeSet = ValuedNodes | VariableNode | BaseNode<NodeType> | undefined;
+export type NodeSet =
+    | ValuedNodes
+    | VariableNode
+    | BaseNode<NodeType>
+    | undefined;

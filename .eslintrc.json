@@ -33,10 +33,27 @@
       "always"
     ],
     "semi": "off",
-    "@typescript-eslint/semi": ["error"],
+    "@typescript-eslint/semi": [
+      "error"
+    ],
     "no-trailing-spaces": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-var-requires": "off"
-  }
+  },
+  "indent": [
+    "error",
+    4,
+    {
+      "SwitchCase": 1
+    }
+  ],
+  "react/jsx-indent": [
+    "error",
+    4
+  ],
+  "react/jsx-indent-props": [
+    "error",
+    4
+  ],
 }

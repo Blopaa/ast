@@ -1,4 +1,4 @@
-export enum TokenType  {
+export enum TokenType {
     STRING = "STRING",
     LITERAL = "LITERAL",
     ASSIGNMENT = "ASSIGNMENT",

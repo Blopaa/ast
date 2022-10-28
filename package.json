@@ -7,7 +7,8 @@
     "build": "tsc",
     "prettier": "prettier -w src/",
     "lint": "eslint src/ --fix",
-    "test": "jest --config jest.config.ts"
+    "test": "jest --config jest.config.ts",
+    "start": "ts-node src/lexer/index.ts"
   },
   "keywords": [],
   "author": "blopa",
