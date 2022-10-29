@@ -9,6 +9,8 @@ export enum TokenType {
     PARENTHESIS_CLOSE = "PARENTHESIS_CLOSE",
     BRACE_OPEN = "BRACE_OPEN",
     BRACE_CLOSE = "BRACE_CLOSE",
+    BRACKET_OPEN = "BRACKET_OPEN",
+    BRACKET_CLOSE = "BRACKET_CLOSE",
 }
 
 export enum Symbols {

@@ -1,4 +1,4 @@
-import { tokensSplitter } from "../../lexer";
+import {devTokenizer, tokensSplitter} from "../../lexer";
 
 describe("tokensSplitter function tests", () => {
     it("should return strings respecting the whitespaces", () => {
@@ -29,5 +29,25 @@ describe("tokensSplitter function tests", () => {
     });
     test("1 word string with whitespaces at the beginning and at the end", () => {
         expect(tokensSplitter("' hello '")).toEqual(["' hello '"]);
+    });
+    test("function inside of a function correct tokenizedMessage", () => {
+        expect(devTokenizer("function b (a, c) { function x(a, c) { } }")).toEqual([
+            { type: 'FUNCTION' },
+            { type: 'LITERAL', value: 'b' },
+            { type: 'PARENTHESIS_OPEN' },
+            { type: 'LITERAL', value: 'a' },
+            { type: 'LITERAL', value: 'c' },
+            { type: 'PARENTHESIS_CLOSE' },
+            { type: 'BRACE_OPEN' },
+            { type: 'FUNCTION' },
+            { type: 'LITERAL', value: 'x' },
+            { type: 'PARENTHESIS_OPEN' },
+            { type: 'LITERAL', value: 'a' },
+            { type: 'LITERAL', value: 'c' },
+            { type: 'PARENTHESIS_CLOSE' },
+            { type: 'BRACE_OPEN' },
+            { type: 'BRACE_CLOSE' },
+            { type: 'BRACE_CLOSE' }
+        ])
     });
 });

@@ -23,14 +23,23 @@ export function tokensSplitter(tokens: string): string[] {
         if (
             (firstSplit[x].charAt(0) === "'" ||
                 firstSplit[x].charAt(0) === '"') &&
-            ((firstSplit[x].charAt(firstSplit.length) !== "'" &&
-                firstSplit[x].charAt(firstSplit.length) !== '"') ||
+            (firstSplit[x].charAt(firstSplit.length) !== "'" ||
+                firstSplit[x].charAt(firstSplit.length) !== '"' ||
                 firstSplit[x].length === 1)
         ) {
             let quotes = true;
             let fakeIndex: number = x;
-            currentWord +=
-                firstSplit.length !== 1 ? `${firstSplit[x]} ` : firstSplit[x];
+            // this code down here is to maintain the string whitespaces
+            if (
+                (firstSplit[x].charAt(0) === ("'" || '"') &&
+                    firstSplit[x].charAt(firstSplit[x].length - 1) !==
+                        ("'" || '"')) ||
+                firstSplit[x] === ("'" || '"')
+            ) {
+                currentWord += firstSplit[x] + " ";
+            } else {
+                currentWord += firstSplit[x];
+            }
             while (quotes && firstSplit[fakeIndex + 1] !== undefined) {
                 if (
                     !firstSplit[fakeIndex + 1].includes("'") &&
@@ -118,8 +127,12 @@ function tokenizeFunctions(
         }
         index++;
         while (index < tokens.length) {
-            if(tokens[index].includes(Symbols.FUNCTION)) {
-                const recursiveFunctionTokens = tokenizeFunctions(tokens, index);
+            // check if there is a function inside the function (recursion)
+            if (tokens[index].includes(Symbols.FUNCTION)) {
+                const recursiveFunctionTokens = tokenizeFunctions(
+                    tokens,
+                    index
+                );
                 recursiveFunctionTokens[0].map((n) => functionTokens.push(n));
                 index = ++recursiveFunctionTokens[1];
             }
@@ -142,9 +155,8 @@ function tokenizeFunctions(
     return [functionTokens, index];
 }
 
-export function devTokenizer() {
-    const messageToTokenize =
-        "function b (a, c) { function x(a, c) { } } const a = 'hello world'";
+// in a future version, this will be eliminated and it will use a cli
+export function devTokenizer(messageToTokenize: string) {
     const tokenizedMessage: Token[] = tokensSplitter(messageToTokenize).map(
         (n) => {
             if (
@@ -179,6 +191,8 @@ export function devTokenizer() {
     console.log(tokenizedMessage);
     const parserResults = parser(tokenizedMessage);
     console.log(JSON.stringify(parserResults, null, 2));
+    return tokenizedMessage;
 }
 
-devTokenizer();
+devTokenizer(" let a = ' hello '");
+
